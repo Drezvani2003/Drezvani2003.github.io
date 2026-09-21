@@ -66,11 +66,17 @@ a:hover{text-decoration-thickness:2px}
 }
 
 /* hero */
-.hero{padding:clamp(2.5rem,7vw,5.5rem) 0 clamp(2.5rem,6vw,4.5rem)}
+.hero{position:relative;padding:clamp(2.5rem,7vw,5.5rem) 0 clamp(2.5rem,6vw,4.5rem)}
+/* faint dot grid behind the hero, like a level-design grid; fades out toward the bottom */
+.hero::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:radial-gradient(color-mix(in srgb,var(--muted) 45%,transparent) 1px,transparent 1.5px);background-size:24px 24px;
+  -webkit-mask-image:linear-gradient(to bottom,#000 0%,transparent 80%);mask-image:linear-gradient(to bottom,#000 0%,transparent 80%);opacity:.35}
+.hero-grid{position:relative}
 .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(2rem,5vw,4rem);align-items:center}
 @media (max-width:900px){.hero-grid{grid-template-columns:1fr}}
 h1{font-family:var(--display);font-weight:800;font-size:clamp(2.6rem,7.5vw,4.6rem);line-height:1;letter-spacing:-.03em;margin:0 0 1.25rem}
-.lede{font-size:clamp(1.1rem,2.2vw,1.3rem);color:var(--muted);max-width:34ch;margin:0 0 1.75rem}
+.lede{font-size:clamp(1.1rem,2.2vw,1.3rem);color:var(--muted);max-width:34ch;margin:0 0 .75rem}
+.also{color:var(--muted);margin:0 0 1.75rem}
 .lede strong{color:var(--ink);font-weight:600}
 .actions{display:flex;flex-wrap:wrap;gap:.75rem}
 .btn{display:inline-flex;align-items:center;justify-content:center;min-height:2.9rem;padding:.6rem 1.25rem;border-radius:999px;
@@ -148,6 +154,16 @@ h2.title{font-family:var(--display);font-weight:800;font-size:clamp(1.8rem,4vw,2
 .links{display:flex;flex-wrap:wrap;gap:.75rem}
 footer{border-top:1px solid var(--line);padding:1.5rem 0 2.5rem;color:var(--muted);font-size:.92rem}
 
+/* off the clock */
+.wave{display:flex;align-items:center;gap:3px;height:34px;margin:0 0 2rem;overflow:hidden}
+.wave span{flex:0 0 3px;border-radius:2px;background:var(--line)}
+.skills dd p{margin:0 0 .8rem;max-width:62ch}
+.shelf{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.25rem 2rem;max-width:34rem}
+@media (max-width:520px){.shelf{grid-template-columns:1fr}}
+.shelf li{border-top:3px solid var(--tone);padding-top:.55rem}
+.shelf strong{display:block;font-family:var(--display);font-weight:700;font-size:1.15rem;line-height:1.25;letter-spacing:-.01em}
+.shelf span{color:var(--muted);font-size:.92rem}
+
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
 </style>
 </head>
@@ -161,6 +177,7 @@ footer{border-top:1px solid var(--line);padding:1.5rem 0 2.5rem;color:var(--mute
       <a href="#projects">Projects</a>
       <a href="#experience">Experience</a>
       <a href="#skills">Skills</a>
+      <a href="#off-the-clock">Off the clock</a>
       <a href="#contact">Contact</a>
     </nav>
     <div class="tools">
@@ -180,6 +197,7 @@ footer{border-top:1px solid var(--line);padding:1.5rem 0 2.5rem;color:var(--mute
       <div>
         <h1>Daniel Rezvani</h1>
         <p class="lede"><strong>Software Engineering student</strong> at Conestoga College, looking for a co-op placement. I build in C, Python, C# and the web.</p>
+        <p class="also">I also make games and write for them.</p>
         <div class="actions">
           <a class="btn btn-primary" href="#projects">See my projects</a>
           <a class="btn btn-quiet" href="Daniel_Rezvani_Resume.pdf">Read my resume</a>
@@ -322,6 +340,31 @@ footer{border-top:1px solid var(--line);padding:1.5rem 0 2.5rem;color:var(--mute
     </div>
   </section>
 
+  <section id="off-the-clock">
+    <div class="wrap">
+      <h2 class="title">Off the clock</h2>
+      <p class="intro">What I am into outside of code.</p>
+      <div class="wave" id="wave" aria-hidden="true"></div>
+      <!-- TODO: add the script's title, and a link to a short excerpt (PDF) in the Game script row if you want to share one. -->
+      <dl class="skills">
+        <div><dt>Making games</dt><dd>I love making games and writing for them.</dd></div>
+        <div><dt>Game script</dt><dd>
+          <p>A first-person psychological horror game set during the COVID-19 pandemic, about a person who starts to hallucinate. It is story-driven and cinematic, with no player choices, light combat and a single boss fight. It runs about eight hours.</p>
+          <ul class="tags"><li>First-person</li><li>Psychological horror</li><li>Linear story</li><li>About 8 hours</li></ul>
+        </dd></div>
+        <div><dt>Favourite games</dt><dd>
+          <ul class="shelf">
+            <li style="--tone:#7A8CA5"><strong>The Witcher 3: Wild Hunt</strong><span>CD Projekt Red</span></li>
+            <li style="--tone:#C08A4B"><strong>Red Dead Redemption 2</strong><span>Rockstar Games</span></li>
+            <li style="--tone:#6E8B5A"><strong>The Last of Us</strong><span>Naughty Dog</span></li>
+            <li style="--tone:#B5523B"><strong>God of War</strong><span>Santa Monica Studio</span></li>
+          </ul>
+        </dd></div>
+        <div><dt>Music</dt><dd>I like Linkin Park.</dd></div>
+      </dl>
+    </div>
+  </section>
+
   <section id="contact">
     <div class="wrap">
       <h2 class="title">Let's talk about a co-op placement</h2>
@@ -370,6 +413,16 @@ footer{border-top:1px solid var(--line);padding:1.5rem 0 2.5rem;color:var(--mute
   nav.addEventListener('click',function(e){
     if(e.target.tagName==='A'){nav.classList.remove('open');menu.setAttribute('aria-expanded','false');menu.setAttribute('aria-label','Open menu');}
   });
+
+  /* ---- static waveform divider ---- */
+  var wave=document.getElementById('wave');
+  if(wave){
+    var bars=Math.max(24,Math.min(90,Math.floor((wave.clientWidth||600)/6)));
+    for(var i=0;i<bars;i++){
+      var h=8+Math.abs(Math.sin(i*0.55)*14+Math.sin(i*1.7)*8+Math.sin(i*0.23)*6);
+      var b=document.createElement('span'); b.style.height=Math.min(34,h)+'px'; wave.appendChild(b);
+    }
+  }
 
   /* ---- bill splitter: same rules as pizza_bill_splitter.c ---- */
   var cost=document.getElementById('cost'), size=document.getElementById('size'), quality=document.getElementById('quality'),
