@@ -11,12 +11,13 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%232447D6'/%3E%3Ctext x='32' y='44' font-family='Arial' font-weight='700' font-size='32' text-anchor='middle' fill='white'%3EDR%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
 <style>
 :root{
   --paper:#F5F7FB; --surface:#FFFFFF; --ink:#101B33; --muted:#55617D;
   --accent:#2447D6; --accent-ink:#FFFFFF; --line:#D5DCEA; --signal:#FFD24D; --signal-ink:#101B33;
   --display:"Bricolage Grotesque","Trebuchet MS","Segoe UI",system-ui,sans-serif;
+  --ps-font:"Orbitron", "Bricolage Grotesque", sans-serif;
   --body:"Instrument Sans","Segoe UI",system-ui,-apple-system,Roboto,sans-serif;
   --radius:14px;
 }
@@ -66,49 +67,96 @@ a:hover{text-decoration-thickness:2px}
 }
 
 /* hero */
-.hero{position:relative;padding:clamp(2.5rem,7vw,5.5rem) 0 clamp(2.5rem,6vw,4.5rem)}
-/* faint dot grid behind the hero, like a level-design grid; fades out toward the bottom */
+.hero{position:relative;padding:clamp(3rem,8vw,6rem) 0 clamp(3rem,7vw,5rem);overflow:hidden}
 .hero::before{content:"";position:absolute;inset:0;pointer-events:none;
   background-image:radial-gradient(color-mix(in srgb,var(--muted) 45%,transparent) 1px,transparent 1.5px);background-size:24px 24px;
   -webkit-mask-image:linear-gradient(to bottom,#000 0%,transparent 80%);mask-image:linear-gradient(to bottom,#000 0%,transparent 80%);opacity:.35}
-.hero-grid{position:relative}
-.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(2rem,5vw,4rem);align-items:center}
-@media (max-width:900px){.hero-grid{grid-template-columns:1fr}}
-h1{font-family:var(--display);font-weight:800;font-size:clamp(2.6rem,7.5vw,4.6rem);line-height:1;letter-spacing:-.03em;margin:0 0 1.25rem}
-.lede{font-size:clamp(1.1rem,2.2vw,1.3rem);color:var(--muted);max-width:34ch;margin:0 0 .75rem}
-.also{color:var(--muted);margin:0 0 1.75rem}
+.hero-content{position:relative;max-width:48rem}
+
+/* --- PlayStation Boot Opening Animation & Font Styles --- */
+@keyframes ps-fade-in {
+  0% { opacity: 0; transform: translateY(20px) scale(0.97); filter: blur(8px); }
+  60% { opacity: 1; filter: blur(0px); }
+  100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0px); }
+}
+
+@keyframes ps-glow-pulse {
+  0%, 100% { text-shadow: 0 0 0px rgba(36, 71, 214, 0); }
+  50% { text-shadow: 0 0 25px color-mix(in srgb, var(--accent) 55%, transparent); }
+}
+
+@keyframes ps-symbol-float {
+  0% { transform: translateY(10px) rotate(0deg); opacity: 0; }
+  20% { opacity: 0.18; }
+  80% { opacity: 0.18; }
+  100% { transform: translateY(-40px) rotate(15deg); opacity: 0; }
+}
+
+.ps-boot-container {
+  position: relative;
+}
+
+h1 {
+  font-family: var(--ps-font);
+  font-weight: 900;
+  font-size: clamp(2.5rem, 7vw, 4.5rem);
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  margin: 0 0 1.25rem;
+  animation: ps-fade-in 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards, ps-glow-pulse 3s ease-in-out 1.2s infinite;
+}
+
+.ps-symbols {
+  position: absolute;
+  top: -20px;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: -1;
+}
+
+.ps-symbol {
+  position: absolute;
+  bottom: 0;
+  font-family: var(--ps-font);
+  font-weight: 900;
+  font-size: 1.5rem;
+  color: var(--accent);
+  opacity: 0;
+  animation: ps-symbol-float 2.5s ease-out forwards;
+}
+
+.ps-symbol:nth-child(1) { left: 10%; animation-delay: 0.1s; }
+.ps-symbol:nth-child(2) { left: 35%; animation-delay: 0.3s; font-size: 1.2rem; }
+.ps-symbol:nth-child(3) { left: 60%; animation-delay: 0.2s; font-size: 1.8rem; }
+.ps-symbol:nth-child(4) { left: 85%; animation-delay: 0.4s; }
+
+.audio-hint {
+  display: inline-block;
+  font-size: 0.8rem;
+  color: var(--muted);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+  margin-bottom: 0.75rem;
+  cursor: pointer;
+}
+.audio-hint:hover { border-color: var(--accent); color: var(--accent); }
+
+.lede{font-size:clamp(1.15rem, 2.3vw, 1.4rem);color:var(--muted);max-width:38ch;margin:0 0 .75rem;animation:ps-fade-in 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.2s backwards}
+.also{color:var(--muted);margin:0 0 1.75rem;animation:ps-fade-in 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.3s backwards}
 .lede strong{color:var(--ink);font-weight:600}
-.actions{display:flex;flex-wrap:wrap;gap:.75rem}
+.actions{display:flex;flex-wrap:wrap;gap:.75rem;animation:ps-fade-in 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.4s backwards}
 .btn{display:inline-flex;align-items:center;justify-content:center;min-height:2.9rem;padding:.6rem 1.25rem;border-radius:999px;
   font-weight:600;text-decoration:none;border:2px solid var(--accent);font-size:1rem}
 .btn-primary{background:var(--accent);color:var(--accent-ink)}
 .btn-primary:hover{filter:brightness(1.08)}
 .btn-quiet{background:transparent;color:var(--accent)}
 .btn-quiet:hover{background:color-mix(in srgb,var(--accent) 12%,transparent)}
-
-/* the demo: a receipt */
-.receipt{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:1.4rem 1.4rem 1.2rem;
-  box-shadow:0 18px 40px -22px color-mix(in srgb,var(--ink) 45%,transparent)}
-.receipt h2{font-family:var(--display);font-size:1.25rem;margin:0 0 .15rem;letter-spacing:-.01em}
-.receipt .sub{color:var(--muted);font-size:.92rem;margin:0 0 1rem}
-.field{display:grid;grid-template-columns:1fr auto;align-items:center;gap:.75rem;padding:.55rem 0;border-top:1px dashed var(--line)}
-.field label,.field .lbl{font-weight:500;font-size:.98rem;padding:0}
-.field input[type=number],.field select{width:7.5rem;font:inherit;font-variant-numeric:tabular-nums;padding:.45rem .6rem;border:1px solid var(--line);
-  border-radius:8px;background:var(--paper);color:var(--ink);text-align:right}
-.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
-.seg label{display:block;cursor:pointer;position:relative}
-.seg input{position:absolute;opacity:0;pointer-events:none}
-.seg span{display:block;padding:.45rem .8rem;font-size:.92rem;font-weight:500;background:var(--paper)}
-.seg input:checked + span{background:var(--accent);color:var(--accent-ink)}
-.seg input:focus-visible + span{outline:3px solid var(--accent);outline-offset:-3px}
-.hint{grid-column:1 / -1;color:var(--muted);font-size:.85rem;margin:-.2rem 0 0}
-.result{border-top:2px dashed var(--line);margin-top:.4rem;padding-top:.9rem}
-.row{display:flex;justify-content:space-between;align-items:baseline;font-variant-numeric:tabular-nums;padding:.15rem 0}
-.row.big{margin-top:.5rem;padding:.7rem .85rem;background:var(--signal);color:var(--signal-ink);border-radius:10px;font-weight:700;font-size:1.15rem}
-.err{color:#B3261E;font-weight:600;font-size:.92rem;min-height:1.3em;margin:.2rem 0 0}
-:root[data-theme="dark"] .err{color:#FF8A80}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .err{color:#FF8A80}}
-.demo-note{color:var(--muted);font-size:.85rem;margin:.9rem 0 0}
 
 /* sections */
 section{padding:clamp(2.5rem,6vw,4.5rem) 0;border-top:1px solid var(--line)}
@@ -193,8 +241,16 @@ footer{border-top:1px solid var(--line);padding:1.5rem 0 2.5rem;color:var(--mute
 
 <main id="main">
   <div class="hero" id="top">
-    <div class="wrap hero-grid">
-      <div>
+    <div class="wrap hero-content">
+      <div class="ps-boot-container">
+        <!-- Floating PlayStation geometric shapes animation on load -->
+        <div class="ps-symbols" aria-hidden="true">
+          <span class="ps-symbol">△</span>
+          <span class="ps-symbol">○</span>
+          <span class="ps-symbol">✕</span>
+          <span class="ps-symbol">▢</span>
+        </div>
+        <div id="audio-hint-box"></div>
         <h1>Daniel Rezvani</h1>
         <p class="lede"><strong>Software Engineering student</strong> at Conestoga College, looking for a co-op placement. I build in C, Python, C# and the web.</p>
         <p class="also">I also make games and write for them.</p>
@@ -204,45 +260,6 @@ footer{border-top:1px solid var(--line);padding:1.5rem 0 2.5rem;color:var(--mute
           <a class="btn btn-quiet" href="https://github.com/Drezvani2003">GitHub</a>
         </div>
       </div>
-
-      <!-- Live demo: same rules as the C program in the pizza-bill-splitter repo -->
-      <form class="receipt" id="split" aria-labelledby="demo-title" novalidate>
-        <h2 id="demo-title">Split a pizza bill</h2>
-        <p class="sub">Try the program from my C assignment, running in your browser.</p>
-
-        <div class="field">
-          <label for="cost">Bill cost ($)</label>
-          <input id="cost" type="number" inputmode="decimal" min="0" step="0.01" value="25.00">
-        </div>
-        <div class="field">
-          <label for="size">People</label>
-          <input id="size" type="number" inputmode="numeric" min="1" max="100" step="1" value="2">
-        </div>
-        <div class="field" role="radiogroup" aria-labelledby="tip-label">
-          <span class="lbl" id="tip-label">Tip</span>
-          <div class="seg">
-            <label><input type="radio" name="style" value="percent" checked><span>18%</span></label>
-            <label><input type="radio" name="style" value="fixed"><span>$5 flat</span></label>
-          </div>
-        </div>
-        <div class="field">
-          <label for="quality">Service (1 to 3)</label>
-          <select id="quality">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3" selected>3</option>
-          </select>
-          <p class="hint">A 3 adds 20% to the tip.</p>
-        </div>
-
-        <div class="result" aria-live="polite">
-          <p class="err" id="err"></p>
-          <div class="row"><span>Tip</span><span id="tip">$5.40</span></div>
-          <div class="row"><span>Total</span><span id="total">$30.40</span></div>
-          <div class="row big"><span>Each person pays</span><span id="each">$15.20</span></div>
-        </div>
-        <p class="demo-note">This is a JavaScript version of my C program. The original is in the <a href="https://github.com/Drezvani2003/pizza-bill-splitter">pizza-bill-splitter</a> repo.</p>
-      </form>
     </div>
   </div>
 
@@ -266,7 +283,7 @@ footer{border-top:1px solid var(--line);padding:1.5rem 0 2.5rem;color:var(--mute
             <h3><a href="https://github.com/Drezvani2003/pizza-bill-splitter">Pizza bill splitter</a></h3>
           </div>
           <div>
-            <p>Splits a bill, adds a fixed or percentage tip, logs every table to a file and prints an end-of-shift report. Uses function pointers and a tip history array that grows with <code>realloc</code>. The demo above follows the same rules.</p>
+            <p>Splits a bill, adds a fixed or percentage tip, logs every table to a file and prints an end-of-shift report. Uses function pointers and a tip history array that grows with <code>realloc</code>.</p>
             <ul class="tags"><li>C</li><li>Dynamic memory</li><li>Function pointers</li><li>File logging</li></ul>
             <a class="code-link" href="https://github.com/Drezvani2003/pizza-bill-splitter">View the code</a>
           </div>
@@ -345,7 +362,6 @@ footer{border-top:1px solid var(--line);padding:1.5rem 0 2.5rem;color:var(--mute
       <h2 class="title">Off the clock</h2>
       <p class="intro">What I am into outside of code.</p>
       <div class="wave" id="wave" aria-hidden="true"></div>
-      <!-- TODO: add the script's title, and a link to a short excerpt (PDF) in the Game script row if you want to share one. -->
       <dl class="skills">
         <div><dt>Making games</dt><dd>I love making games and writing for them.</dd></div>
         <div><dt>Game script</dt><dd>
@@ -360,7 +376,7 @@ footer{border-top:1px solid var(--line);padding:1.5rem 0 2.5rem;color:var(--mute
             <li style="--tone:#B5523B"><strong>God of War</strong><span>Santa Monica Studio</span></li>
           </ul>
         </dd></div>
-        <div><dt>Music</dt><dd>I like Linkin Park.</dd></div>
+        <div><dt>Music</dt><dd>I like Linkin Park, RIP Chester.</dd></div>
       </dl>
     </div>
   </section>
@@ -424,24 +440,87 @@ footer{border-top:1px solid var(--line);padding:1.5rem 0 2.5rem;color:var(--mute
     }
   }
 
-  /* ---- bill splitter: same rules as pizza_bill_splitter.c ---- */
-  var cost=document.getElementById('cost'), size=document.getElementById('size'), quality=document.getElementById('quality'),
-      err=document.getElementById('err'), tipEl=document.getElementById('tip'), totalEl=document.getElementById('total'), eachEl=document.getElementById('each'),
-      form=document.getElementById('split');
-  function money(n){return '$'+n.toFixed(2)}
-  function calc(){
-    var c=parseFloat(cost.value), n=Number(size.value), style=form.elements['style'].value, q=Number(quality.value);
-    err.textContent='';
-    if(!isFinite(c)||c<=0){err.textContent='Cost must be greater than 0.00.';tipEl.textContent=totalEl.textContent=eachEl.textContent='$0.00';return;}
-    if(!Number.isInteger(n)||n<1||n>100){err.textContent='Enter a whole number of people between 1 and 100.';tipEl.textContent=totalEl.textContent=eachEl.textContent='$0.00';return;}
-    var tip=style==='fixed'?5.00:c*0.18;      /* fixed tip is $5, percentage tip is 18% */
-    if(q===3) tip=tip*1.20;                   /* quality 3 adds 20% to the tip */
-    var total=c+tip;
-    tipEl.textContent=money(tip); totalEl.textContent=money(total); eachEl.textContent=money(total/n);
+  /* ---- PlayStation Startup Sound Synthesizer via Web Audio API ---- */
+  function playPlayStationSound() {
+    try {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContext) return;
+      const ctx = new AudioContext();
+
+      const masterGain = ctx.createGain();
+      masterGain.gain.setValueAtTime(0.35, ctx.currentTime);
+      masterGain.connect(ctx.destination);
+
+      // Deep Intro Synth Sweep
+      const osc1 = ctx.createOscillator();
+      const osc2 = ctx.createOscillator();
+      const sweepGain = ctx.createGain();
+
+      osc1.type = 'sawtooth';
+      osc2.type = 'sine';
+
+      osc1.frequency.setValueAtTime(80, ctx.currentTime);
+      osc1.frequency.exponentialRampToValueAtTime(196, ctx.currentTime + 1.2);
+      osc2.frequency.setValueAtTime(40, ctx.currentTime);
+      osc2.frequency.exponentialRampToValueAtTime(98, ctx.currentTime + 1.2);
+
+      sweepGain.gain.setValueAtTime(0.01, ctx.currentTime);
+      sweepGain.gain.linearRampToValueAtTime(0.25, ctx.currentTime + 0.4);
+      sweepGain.gain.setValueAtTime(0.25, ctx.currentTime + 1.8);
+      sweepGain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 3.0);
+
+      osc1.connect(sweepGain);
+      osc2.connect(sweepGain);
+      sweepGain.connect(masterGain);
+
+      osc1.start(ctx.currentTime);
+      osc2.start(ctx.currentTime);
+      osc1.stop(ctx.currentTime + 3.0);
+      osc2.stop(ctx.currentTime + 3.0);
+
+      // Chime Bells sequence
+      const chimeTimes = [1.2, 1.4, 1.6, 1.8, 2.1];
+      const chimeFreqs = [523.25, 659.25, 783.99, 987.77, 1046.50];
+
+      chimeTimes.forEach((timeOffset, idx) => {
+        const chimeOsc = ctx.createOscillator();
+        const chimeGain = ctx.createGain();
+
+        chimeOsc.type = 'sine';
+        chimeOsc.frequency.setValueAtTime(chimeFreqs[idx], ctx.currentTime + timeOffset);
+
+        chimeGain.gain.setValueAtTime(0, ctx.currentTime + timeOffset);
+        chimeGain.gain.linearRampToValueAtTime(0.18, ctx.currentTime + timeOffset + 0.03);
+        chimeGain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + timeOffset + 1.2);
+
+        chimeOsc.connect(chimeGain);
+        chimeGain.connect(masterGain);
+
+        chimeOsc.start(ctx.currentTime + timeOffset);
+        chimeOsc.stop(ctx.currentTime + timeOffset + 1.2);
+      });
+
+    } catch (e) {
+      console.log('Audio context blocked or not supported:', e);
+    }
   }
-  form.addEventListener('input',calc);
-  form.addEventListener('submit',function(e){e.preventDefault();});
-  calc();
+
+  window.addEventListener('DOMContentLoaded', function() {
+    playPlayStationSound();
+  });
+
+  var hintBox = document.getElementById('audio-hint-box');
+  if (hintBox) {
+    var hintBtn = document.createElement('button');
+    hintBtn.className = 'audio-hint';
+    hintBtn.innerHTML = '🔊 Click to enable PS intro sound';
+    hintBtn.onclick = function() {
+      playPlayStationSound();
+      hintBtn.remove();
+    };
+    hintBox.appendChild(hintBtn);
+    setTimeout(function() { if (hintBtn.parentNode) hintBtn.remove(); }, 6000);
+  }
 })();
 </script>
 </body>
